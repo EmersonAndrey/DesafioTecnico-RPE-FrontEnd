@@ -1,0 +1,9 @@
+.nav-title {
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-title:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,15 @@
+.custom-modal .modal-content {
+  background-color: #404244; 
+  color: white;              
+  border-radius: 10px;
+}
+
+.card-hover {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: scale(1.05);
+  z-index: 1;
+}
