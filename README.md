@@ -1,6 +1,6 @@
 # 💼 Desafio Técnico RPE – API de Clientes e Faturas
 
-Este é o **frontend** da aplicação **Rental Movies Store**, construído com **React**, **Bootstrap**, **HTML** e **CSS**, que se comunica com o backend desenvolvido em Spring Boot. O sistema permite registrar, listar, bloquear clientes inadimplentes e realizar pagamentos de faturas, com regras de negócio automáticas via agendamento (scheduler).
+Este é o **frontend** da aplicação **Gestão de clientes e faturas**, construído com **React**, **Bootstrap**, **HTML** e **CSS**, que se comunica com o backend desenvolvido em Spring Boot. O sistema permite registrar, listar, bloquear clientes inadimplentes e realizar pagamentos de faturas, com regras de negócio automáticas via agendamento (scheduler).
 
 ---
 
