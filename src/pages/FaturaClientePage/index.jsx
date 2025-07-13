@@ -3,10 +3,10 @@ import NavBar from '../../components/Navbar'
 import { Card, Button, Row, Col, Modal, Container } from 'react-bootstrap';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './index.css'
 import { registrarPagamentoFatura } from '../../service/fatura';
 import { useAppContext } from '../../context/AppContext';
 import { buscarTodosClientes } from '../../service/cliente';
+import './index.css'
 
 const FaturaCliente = () => {
 
@@ -18,6 +18,9 @@ const FaturaCliente = () => {
     const [cliente, setCliente] = useState(clienteInicial);
 
     const { setListaClientes } = useAppContext();
+
+    const [filtroFatura, setFiltroFatura] = useState('Todas');
+
 
     function formatarDataParaExibir(data) {
         const [ano, mes, dia] = data.split('-');
@@ -37,7 +40,7 @@ const FaturaCliente = () => {
         const clientesAtualizados = await buscarTodosClientes();
         setListaClientes(clientesAtualizados);
 
-        
+
         const clienteAtualizado = clientesAtualizados.find(c => c.id === cliente.id);
         if (clienteAtualizado) {
             setCliente(clienteAtualizado);
@@ -45,6 +48,13 @@ const FaturaCliente = () => {
 
         setModalShow(false);
     };
+
+    const faturasFiltradas = cliente.faturas?.filter(fatura => {
+        if (filtroFatura === 'Todas') return true;
+        if (filtroFatura === 'Atrasadas') return fatura.statusFatura === 'A';
+        if (filtroFatura === 'Aberta') return fatura.statusFatura === 'B';
+        return false;
+    }) || [];
 
 
     return (
@@ -65,39 +75,74 @@ const FaturaCliente = () => {
                     </div>
                 )}
 
+                <hr className='text-white'/>
+
                 <div className='d-flex flex-column mt-4'>
+
+                    <div className='d-flex justify-content-between align-items-center mx-5 my-3'>
+                        <div className='d-flex'>
+                            <h4
+                                className={`titulo-hover me-4 ${filtroFatura === 'Todas' ? 'ativo' : ''}`}
+                                onClick={() => setFiltroFatura('Todas')}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Todas
+                            </h4>
+                            <h4
+                                className={`titulo-hover ${filtroFatura === 'Atrasadas' ? 'ativo' : ''}`}
+                                onClick={() => setFiltroFatura('Atrasadas')}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Atrasadas
+                            </h4>
+                            <h4
+                                className={`titulo-hover ${filtroFatura === 'Aberta' ? 'ativo' : ''} ms-4`}
+                                onClick={() => setFiltroFatura('Aberta')}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Aberta
+                            </h4>
+                        </div>
+                    </div>
 
                     <div className='mt-4'>
                         <Row xs={1} sm={2} md={3} lg={4} xl={5} className="g-0">
-                            {cliente.faturas.map((fatura, idx) => (
-                                <Col key={idx}>
-                                    <Card
-                                        className='card-hover'
-                                        style={{
-                                            maxWidth: '200px',
-                                            margin: '0 auto',
-                                            marginTop: '30px',
-                                            maxHeight: '500px',
-                                            backgroundColor: '#6b6b6bff',
-                                            color: '#ffffff'
-                                        }}
-                                        onClick={() => handleShowModal(fatura)}
-                                    >
-
-                                        <Card.Img
-                                            variant="top"
-                                            alt="newspaper do lucide icons"
-                                            src={`/src/assets/newspaper.svg`}
-                                        />
-                                        <Card.Body style={{ maxHeight: '150px', overflow: 'hidden' }}>
-                                            <Card.Title>R$ {fatura.valor.toFixed(2)}</Card.Title>
-                                            <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                Status: <strong>{fatura.statusFatura}</strong>
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))}
+                            {faturasFiltradas.length === 0 ? (
+                                <div className="position-fixed top-50 start-50 translate-middle mt-5">
+                                    <h1 className='text-danger text-center mt-5'>
+                                        O cliente não possui nenhuma fatura atrasada ou aberta
+                                    </h1>
+                                </div>
+                            ) : (
+                                faturasFiltradas.map((fatura, idx) => (
+                                    <Col key={idx}>
+                                        <Card
+                                            className='card-hover'
+                                            style={{
+                                                maxWidth: '200px',
+                                                margin: '0 auto',
+                                                marginTop: '30px',
+                                                maxHeight: '500px',
+                                                backgroundColor: '#6b6b6bff',
+                                                color: '#ffffff'
+                                            }}
+                                            onClick={() => handleShowModal(fatura)}
+                                        >
+                                            <Card.Img
+                                                variant="top"
+                                                alt="newspaper do lucide icons"
+                                                src={`/src/assets/newspaper.svg`}
+                                            />
+                                            <Card.Body style={{ maxHeight: '150px', overflow: 'hidden' }}>
+                                                <Card.Title>R$ {fatura.valor.toFixed(2)}</Card.Title>
+                                                <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    Status: <strong>{fatura.statusFatura}</strong>
+                                                </Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                ))
+                            )}
                         </Row>
                     </div>
                 </div>
@@ -152,10 +197,11 @@ const FaturaCliente = () => {
                             <Button
                                 variant="primary"
                                 onClick={() => {
-                                    setModalShow(false)
-                                    realizarPagamentoFatura()
+                                    setModalShow(false);
+                                    realizarPagamentoFatura();
                                 }}
-                                disabled={selectedInvoice.status === "P" ? true : false}>
+                                disabled={selectedInvoice?.statusFatura?.toUpperCase() === 'P'}
+                            >
                                 Registrar Pagamento
                             </Button>
                         </Modal.Footer>

@@ -13,3 +13,20 @@
   transform: scale(1.05);
   z-index: 1;
 }
+
+
+.titulo-hover {
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.titulo-hover:hover {
+  color: #cccccc;
+}
+
+.titulo-hover.ativo {
+  color: #999999;
+  font-weight: bold;
+  text-decoration: underline;
+}

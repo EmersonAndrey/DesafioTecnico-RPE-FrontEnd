@@ -1,6 +1,6 @@
 .custom-modal .modal-content {
-  background-color: #404244; 
-  color: white;              
+  background-color: #404244;
+  color: white;
   border-radius: 10px;
 }
 
@@ -12,4 +12,20 @@
 .card-hover:hover {
   transform: scale(1.05);
   z-index: 1;
+}
+
+.titulo-filtro {
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.titulo-filtro:hover {
+  color: #cccccc;
+}
+
+.titulo-filtro.ativo {
+  color: #999999;
+  font-weight: bold;
+  text-decoration: underline;
 }
