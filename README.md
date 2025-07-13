@@ -66,12 +66,6 @@ Após iniciar, acesse a aplicação pelo navegador:
 
 ---
 
-### 🌐 Acesse a API:
-
-- Swagger UI: http://localhost:8080/swagger-ui.html
-  
----
-
 ## 🛠️ Funcionalidades
 
 - Visualização de cliente
