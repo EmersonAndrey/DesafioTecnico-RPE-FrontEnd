@@ -7,6 +7,7 @@ import { registrarPagamentoFatura } from '../../service/fatura';
 import { useAppContext } from '../../context/AppContext';
 import { buscarTodosClientes } from '../../service/cliente';
 import './index.css'
+import { ToastContainer, toast } from 'react-toastify';
 
 const FaturaCliente = () => {
 
@@ -21,6 +22,15 @@ const FaturaCliente = () => {
 
     const [filtroFatura, setFiltroFatura] = useState('Todas');
 
+    const pagamentoBemSucedido = () => toast.success("A fatura foi paga com sucesso!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 
     function formatarDataParaExibir(data) {
         const [ano, mes, dia] = data.split('-');
@@ -46,6 +56,7 @@ const FaturaCliente = () => {
             setCliente(clienteAtualizado);
         }
 
+        pagamentoBemSucedido();
         setModalShow(false);
     };
 
@@ -75,7 +86,7 @@ const FaturaCliente = () => {
                     </div>
                 )}
 
-                <hr className='text-white'/>
+                <hr className='text-white' />
 
                 <div className='d-flex flex-column mt-4'>
 
@@ -209,6 +220,7 @@ const FaturaCliente = () => {
                 )}
 
             </div>
+            <ToastContainer />
         </>
     )
 }

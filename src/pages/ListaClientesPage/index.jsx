@@ -7,6 +7,7 @@ import { useAppContext } from '../../context/AppContext';
 import { buscarTodosClientes, salvarCliente } from '../../service/cliente';
 import { IMaskInput } from 'react-imask';
 import './index.css'
+import { ToastContainer, toast } from 'react-toastify';
 
 const ListClient = () => {
 
@@ -17,7 +18,7 @@ const ListClient = () => {
     const [nome, setNome] = useState();
     const [cpf, setCpf] = useState();
     const [dataNascimento, setDataNascimento] = useState();
-    const [statusBloqueio, setStatusBloqueio] = useState();
+    const [statusBloqueio, setStatusBloqueio] = useState("");
     const [limiteCredito, setLimiteCredito] = useState();
 
     const [filtro, setFiltro] = useState("todos");
@@ -26,24 +27,58 @@ const ListClient = () => {
     const { listaClientes, setListaClientes } = useAppContext();
     const navigate = useNavigate();
 
+    const cadastroBemSucedido = () => toast.success("O cliente foi cadastrado com sucesso!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+
+    const erroAoCadastrar = (mensagem) => toast.error(mensagem, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+
 
     const cadastrarCliente = async () => {
-        if (nome && cpf && dataNascimento && statusBloqueio && limiteCredito) {
-            const cliente = {
-                nome,
-                cpf,
-                dataNascimento: formatarDataParaSalvar(dataNascimento),
-                statusBloqueio,
-                limiteCredito
-            }
+        if (!nome || !cpf || !dataNascimento || !statusBloqueio || !limiteCredito) {
+            erroAoCadastrar("Por favor, preencha todos os campos.");
+            return;
+        }
 
+        const cliente = {
+            nome,
+            cpf,
+            dataNascimento: formatarDataParaSalvar(dataNascimento),
+            statusBloqueio,
+            limiteCredito
+        };
+
+        try {
             await salvarCliente(cliente);
             const clientes = await buscarTodosClientes();
             setListaClientes(clientes);
             setModalShow(false);
             setCadastroCliente(null);
+            cadastroBemSucedido();
+
+        } catch (error) {
+            if (error.message) {
+                erroAoCadastrar(error.message);
+            } else {
+                erroAoCadastrar("Erro ao cadastrar cliente. Tente novamente.");
+            }
         }
     }
+
 
     function formatarDataParaSalvar(data) {
         if (!data || data.length !== 10) {
@@ -289,6 +324,7 @@ const ListClient = () => {
                 )}
 
             </div>
+            <ToastContainer />
         </>
     )
 }
