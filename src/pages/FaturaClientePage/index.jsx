@@ -32,11 +32,6 @@ const FaturaCliente = () => {
         progress: undefined,
     });
 
-    function formatarDataParaExibir(data) {
-        const [ano, mes, dia] = data.split('-');
-        return `${dia.padStart(2, '0')}-${mes.padStart(2, '0')}-${ano}`;
-    }
-
     const handleShowModal = (fatura) => {
         setSelectedInvoice(fatura)
         setModalShow(true)
@@ -180,7 +175,7 @@ const FaturaCliente = () => {
                                     <Col md={8}>
                                         <h3>{cliente?.nome}</h3>
                                         <p><strong>Valor:</strong> {selectedInvoice.valor} </p>
-                                        <p><strong>Data de Vencimento:</strong> {formatarDataParaExibir(selectedInvoice.dataVencimento)} </p>
+                                        <p><strong>Data de Vencimento:</strong> {selectedInvoice.dataVencimento} </p>
                                         {(() => {
                                             let badge = null;
                                             switch (selectedInvoice.statusFatura) {
@@ -198,7 +193,7 @@ const FaturaCliente = () => {
                                         })()}
                                         <p>
                                             <strong>Data de Pagamento:</strong>{" "}
-                                            {selectedInvoice.dataPagamento ? formatarDataParaExibir(selectedInvoice.dataPagamento) : "Não consta"}
+                                            {selectedInvoice.dataPagamento ? selectedInvoice.dataPagamento : "Não consta"}
                                         </p>
                                     </Col>
                                 </Row>
