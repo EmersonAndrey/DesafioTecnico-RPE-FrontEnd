@@ -76,6 +76,14 @@ Após iniciar, acesse a aplicação pelo navegador:
 
 ---
 
+## 🧩 Integração com o Backend
+
+Para executar o sistema completo, clone e rode também o backend:
+
+🔗 [Repositório do Backtend](https://github.com/EmersonAndrey/DesafioTecnico-RPE-BackEnd)
+
+---
+
 ## 💡 Melhorias Futuras
 Caso houvesse mais tempo, as seguintes melhorias poderiam ser implementadas:
 
